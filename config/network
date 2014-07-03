@@ -39,7 +39,7 @@ config interface 'iptv'
 	option proto 'dhcp'
 	# [1] Het IPTV-verkeer (de multicast streams) komen binnen op VLAN 4
 	option ifname 'eth1.4'
-	# [2] Als dezelfde MAC-adres als op de WAN wordt gebruikt dan stopt de WAN of IPTV met werken
+	# [2] Als hetzelfde MAC-adres wordt gebruikt als op de WAN dan stopt de WAN of IPTV met werken
 	# Pas hieronder aan: Genereer en gebruik een "Locally Administered Unicast" MAC-adres van:
 	# http://www.hellion.org.uk/cgi-bin/randmac.pl?scope=local&type=unicast
 	option macaddr 'XX:XX:XX:XX:XX:XX'
