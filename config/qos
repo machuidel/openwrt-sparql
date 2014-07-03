@@ -27,7 +27,7 @@ config classify
 	option target 'Priority'
 	option ports '53,22,5060-5080'
 
-# Geef aantal veelgebruikte TCP poorten verkeer normale prioriteit
+# Geef verkeer op aantal veelgebruikte TCP poorten normale prioriteit
 config classify
 	option target 'Normal'
 	option proto 'tcp'
