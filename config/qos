@@ -1,0 +1,36 @@
+# SPARQL instellingen voor de WNDR3700 met OpenWRT 12.09
+# Voeg toe en pas aan waar nodig (en op eigen verantwoordelijkheid)
+
+# References:
+# [0] referentie onbekend / niet nodig
+
+# Let op: Zorg dat de "qos-scripts" package geinstalleerd is
+
+# Stel QoS in voor de WAN interface
+config interface 'wan'
+	option classgroup 'Default'
+	# [0] Pas hieronder aan: Maximaal te halen download snelheid in Kbps
+	# Meet de download snelheid op: http://speedtest.tweak.nl/
+	option download '102400'
+	# [0] Pas hieronder aan: Maximaal te halen upload snelheid in Kbps
+	option upload '102400'
+	option overhead '1'
+	option enabled '1'
+
+# Geef alle UDP verkeer de hoogste prioriteit
+config classify
+	option target 'Priority'
+	option proto 'udp'
+
+# Geef SIP (VOIP), SSH en DNS verkeer de hoogste prioriteit
+config classify
+	option target 'Priority'
+	option ports '53,22,5060-5080'
+
+# Geef aantal veelgebruikte TCP poorten verkeer normale prioriteit
+config classify
+	option target 'Normal'
+	option proto 'tcp'
+	option ports '20,21,25,80,110,443,993,995'
+
+# Laat de rest zoals het is en zorg dat deze hieronder staan

@@ -1,0 +1,124 @@
+# SPARQL instellingen voor de WNDR3700 met OpenWRT 12.09
+# Voeg toe en pas aan waar nodig (en op eigen verantwoordelijkheid)
+
+# References:
+# [0] referentie onbekend / niet nodig
+# [1] http://www.tweak.nl/aankondigingen.html
+# [2] http://gathering.tweakers.net/forum/list_message/42491757#42491757
+# [3] http://wiki.openwrt.org/_media/inbox/netgear/wndr3700-c.png
+
+# LAN interface (fysieke switch poorten)
+config interface 'lan'
+	option type 'bridge'
+	option proto 'static'
+	option ifname 'eth0.1'
+	# [0] Pas hieronder aan of laat staan: IP-adres van router
+	option ipaddr '192.168.100.1' 
+	option netmask '255.255.255.0'
+	# [1] IGMP snooping of proxying moet worden toegepast op VLAN 4
+	option igmp_snooping '1'
+	option defaultroute '0'
+	option peerdns '0' 
+	# [0] STP mag alleen aan staan op het LAN netwerk
+	option stp '1'
+
+# WAN interface (fysieke WAN poort)
+config interface 'wan'
+	# [1] Bij alle nieuwe verbindigen wordt er gebruik gemaakt van DHCP
+	option proto 'dhcp'
+	# [1] Voor al het 'gewone' internet-verkeer wordt VLAN 34 gebruikt
+	option ifname 'eth1.34'
+	# [2] Pas hieronder aan: MAC-adres die achterop de officiele Tweak router staat
+	option macaddr 'XX:XX:XX:XX:XX:XX'
+	option defaultroute '1'
+	option peerdns '1'
+
+# IPTV interface (fysieke WAN poort)
+config interface 'iptv'
+	# [1] Router moet DHCP'en op VLAN 4 (802.1q)
+	option proto 'dhcp'
+	# [1] Het IPTV-verkeer (de multicast streams) komen binnen op VLAN 4
+	option ifname 'eth1.4'
+	# [2] Als dezelfde MAC-adres als op de WAN wordt gebruikt dan stopt de WAN of IPTV met werken
+	# Pas hieronder aan: Genereer en gebruik een "Locally Administered Unicast" MAC-adres van:
+	# http://www.hellion.org.uk/cgi-bin/randmac.pl?scope=local&type=unicast
+	option macaddr 'XX:XX:XX:XX:XX:XX'
+	# [1] Default route mag nooit over VLAN 4 gaan
+	option defaultroute '0'
+	option peerdns '0'
+
+# [1] Er moet een static route worden gezet naar 185.6.48.0/26 over VLAN 4
+config route
+	option interface 'iptv'
+	option target '185.6.48.0'
+	option netmask '255.255.255.192'
+	# [1] Over het op VLAN 4 verkregen gateway IP (Note: Die wordt dus niet verkregen)
+	# [2] Pas hieronder aan: Het IP van de machine die de DHCP lease heeft uitgegeven voor VLAN 4
+	option gateway '10.X.X.X'
+
+# Interne switch (WNDR3700)
+config switch
+	option name 'rtl8366s'
+	option reset '1'
+	option blinkrate '2'
+	option enable_vlan '1'
+	option enable_vlan4k '1'
+
+# Untag VLAN 1 op alle LAN poorten (WNDR3700)
+config switch_vlan
+	option vlan '1'
+	option device 'rtl8366s'
+	option ports '0 1 2 3 5t'
+
+# Stel VLAN 4 voor IPTV in op CPU poort (WNDR3700)
+config switch_vlan
+	option vlan '4'
+	option device 'rtl8366s'
+	option ports '5t'
+
+# Stel VLAN 34 voor WAN in op CPU poort (WNDR3700)
+config switch_vlan
+	option vlan '34'
+	option device 'rtl8366s'
+	option ports '5t'
+
+# [3] Poort 4 op switch met VLAN 1 als default (WNDR3700)
+config switch_port
+	option led '6'
+	option port '0'
+	option pvid '1'
+	option device 'rtl8366s'
+
+# [3] Poort 3 op switch met VLAN 1 als default (WNDR3700)
+config switch_port
+	option led '6'
+	option port '1'
+	option pvid '1'
+	option device 'rtl8366s'
+
+# [3] Poort 2 op switch met VLAN 1 als default (WNDR3700)
+config switch_port
+	option led '6'
+	option port '2'
+	option pvid '1'
+	option device 'rtl8366s'
+
+# [3] Poort 1 op switch met VLAN 1 als default (WNDR3700)
+config switch_port
+	option led '6'
+	option port '3'
+	option pvid '1'
+	option device 'rtl8366s'
+
+# [3] Ongebruikte poort op switch (WNDR3700)
+config switch_port
+	option port '4'
+	option device 'rtl8366s'
+
+# [3] Poort op switch die verbind met CPU (WNDR3700)
+config switch_port
+	option led '6'
+	option port '5'
+	option device 'rtl8366s'
+
+# Laat de rest zoals het is

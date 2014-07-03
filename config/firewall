@@ -1,0 +1,51 @@
+# SPARQL instellingen voor de WNDR3700 met OpenWRT 12.09
+# Voeg toe en pas aan waar nodig (en op eigen verantwoordelijkheid)
+
+# References:
+# [0] referentie onbekend / niet nodig
+# [1] http://www.tweak.nl/aankondigingen.html
+
+# Default chain
+config defaults
+	option syn_flood '1'
+	option input 'ACCEPT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	option drop_invalid '1'
+
+# LAN zone (VLAN 1)
+config zone
+	option name 'lan'
+	option network 'lan'
+	option input 'ACCEPT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+
+# WAN zone (VLAN 34)
+config zone
+	option name 'wan'
+	option network 'wan'
+	option input 'REJECT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	option masq '1'
+
+config forwarding
+	option dest 'wan'
+	option src 'lan'
+
+# IPTV zone (VLAN 4)
+config zone
+	option name 'iptv'
+	option network 'iptv'
+	option input 'REJECT'
+	option output 'ACCEPT'
+	option forward 'REJECT'
+	# [1] Er moet NAT worden toegepast voor verkeer over VLAN 4
+	option masq '1'
+
+config forwarding
+	option dest 'iptv'
+	option src 'lan'
+
+# Laat de rest zoals het is
