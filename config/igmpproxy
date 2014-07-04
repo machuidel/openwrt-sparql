@@ -1,0 +1,30 @@
+# Sparql instellingen voor de WNDR3700 met OpenWRT 12.09
+# Voeg toe en pas aan waar nodig (en op eigen verantwoordelijkheid)
+
+# References:
+# [0] referentie onbekend / niet nodig
+# [1] http://wiki.openwrt.org/doc/howto/udp_multicast
+# [2] http://wiki.mikrotik.com/wiki/Manual:Routing/IGMP-Proxy
+
+# Let op: Zorg dat de "igmpproxy" package geinstalleerd is
+
+# Zet IGMP proxy aan
+config igmpproxy
+	# [2] Note: Use quick leave only if there
+	# is one subscriber (STB) behind the proxy.
+	option quickleave 1
+
+# Stel IGMP proxy in voor IPTV interface
+config phyint
+	option network iptv
+	option direction upstream
+	# [1] If you're not sure what to specify for altnet,
+	# comment it out and look for the igmpproxy output in the log
+	# [0] Voor zenders die niet werken is het mogelijk dat er een 
+	# IP-netwerk toegevoegd moet worden als 'list altnet'. Zie log.
+	list altnet 213.75.167.0/24
+
+# Stel IGMP proxy in voor LAN interface
+config phyint
+	option network lan
+	option direction downstream

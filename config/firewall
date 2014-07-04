@@ -4,6 +4,7 @@
 # References:
 # [0] referentie onbekend / niet nodig
 # [1] http://www.tweak.nl/aankondigingen.html
+# [2] http://wiki.openwrt.org/doc/howto/udp_multicast
 
 # Default chain
 config defaults
@@ -47,5 +48,22 @@ config zone
 config forwarding
 	option dest 'iptv'
 	option src 'lan'
+
+# [2] Sta IGMP op IPTV toe
+config rule
+	option name 'Allow-IGMP'
+	option proto 'igmp'
+	option target 'ACCEPT'
+	option src 'iptv'
+
+# [2] Sta IGMP-proxy van IPTV naar LAN toe
+config rule
+	option name 'Allow-IGMP-Proxy'
+	option proto 'udp'
+	option family 'ipv4'
+	option target 'ACCEPT'
+	option dest_ip '224.0.0.0/4'
+	option dest 'lan'
+	option src 'iptv'
 
 # Laat de rest zoals het is
