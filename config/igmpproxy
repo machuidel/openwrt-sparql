@@ -23,6 +23,8 @@ config phyint
 	# [0] Voor zenders die niet werken is het mogelijk dat er een 
 	# IP-netwerk toegevoegd moet worden als 'list altnet'. Zie log.
 	list altnet 213.75.167.0/24
+	# [0] Pas hieronder aan: IP-netwerk van LAN zone
+	list altnet 192.168.100.0/24
 
 # Stel IGMP proxy in voor LAN interface
 config phyint
