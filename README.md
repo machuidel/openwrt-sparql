@@ -1,4 +1,4 @@
-openwrt-sparql
+openwrt sparql
 ==============
 
 The OpenWRT configuration for the Dutch internet provider Sparql / Tweak I currently use.
